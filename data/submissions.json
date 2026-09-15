@@ -1,5 +1,20 @@
 [
   {
+    "id": "mu2yjwaqelu6",
+    "timestamp": "2026-09-15T17:40:47.810Z",
+    "teamName": "Anonymous Operative",
+    "stageId": 1,
+    "stageName": "The Gate of Whispers",
+    "portalId": "A",
+    "portalTitle": "Portal A: The Mirage Clock",
+    "type": "DECOY",
+    "status": "INCORRECT",
+    "answer": "A Clock",
+    "passkeyAwarded": null,
+    "attemptsLeft": 1,
+    "message": "Incorrect option for this decoy puzzle. Try another choice or portal!"
+  },
+  {
     "id": "mu2qo4rntf5p",
     "timestamp": "2026-09-15T14:00:08.483Z",
     "teamName": "Anonymous Operative",

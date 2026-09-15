@@ -1,6 +1,6 @@
 {
-  "baseUrl": "https://dkndh-49-43-228-241.free.pinggy.net",
-  "generatedAt": "2026-09-15T17:16:38.543Z",
+  "baseUrl": "https://qr-mystery-hunt.vercel.app",
+  "generatedAt": "2026-09-15T17:43:29.240Z",
   "stages": [
     {
       "stageId": 1,
@@ -10,25 +10,25 @@
       "links": [
         {
           "portal": "a",
-          "url": "https://dkndh-49-43-228-241.free.pinggy.net/stage/1/a",
+          "url": "https://qr-mystery-hunt.vercel.app/stage/1/a",
           "title": "Portal A: The Mirage Clock",
           "type": "decoy"
         },
         {
           "portal": "b",
-          "url": "https://dkndh-49-43-228-241.free.pinggy.net/stage/1/b",
+          "url": "https://qr-mystery-hunt.vercel.app/stage/1/b",
           "title": "Portal B: The False Constellation",
           "type": "decoy"
         },
         {
           "portal": "c",
-          "url": "https://dkndh-49-43-228-241.free.pinggy.net/stage/1/c",
+          "url": "https://qr-mystery-hunt.vercel.app/stage/1/c",
           "title": "Portal C: The Caesar Cipher Cryptograph",
           "type": "true"
         }
       ],
-      "gatewayUrl": "https://dkndh-49-43-228-241.free.pinggy.net/stage/1",
-      "payloadText": "🕵️ STAGE 1: THE GATE OF WHISPERS\n━━━━━━━━━━━━━━━━━━━━━━━━━\n❓ PUZZLE QUESTION:\nAn encrypted Roman dispatch was intercepted: [ FKURQRV ]. Decode the Caesar cipher (shifted by +3 letters) to uncover the ancient secret word! Which portal holds the true cipher chamber to submit the answer?\n━━━━━━━━━━━━━━━━━━━━━━━━━\nSelect your portal:\n1) https://dkndh-49-43-228-241.free.pinggy.net/stage/1/a\n2) https://dkndh-49-43-228-241.free.pinggy.net/stage/1/b\n3) https://dkndh-49-43-228-241.free.pinggy.net/stage/1/c\n⚠️ Only ONE portal holds the true key! (Max 2 attempts)"
+      "gatewayUrl": "https://qr-mystery-hunt.vercel.app/stage/1",
+      "payloadText": "🕵️ STAGE 1: THE GATE OF WHISPERS\n━━━━━━━━━━━━━━━━━━━━━━━━━\n❓ PUZZLE QUESTION:\nAn encrypted Roman dispatch was intercepted: [ FKURQRV ]. Decode the Caesar cipher (shifted by +3 letters) to uncover the ancient secret word! Which portal holds the true cipher chamber to submit the answer?\n━━━━━━━━━━━━━━━━━━━━━━━━━\nSelect your portal:\n1) https://qr-mystery-hunt.vercel.app/stage/1/a\n2) https://qr-mystery-hunt.vercel.app/stage/1/b\n3) https://qr-mystery-hunt.vercel.app/stage/1/c\n⚠️ Only ONE portal holds the true key! (Max 2 attempts)"
     },
     {
       "stageId": 2,
@@ -38,25 +38,25 @@
       "links": [
         {
           "portal": "a",
-          "url": "https://dkndh-49-43-228-241.free.pinggy.net/stage/2/a",
+          "url": "https://qr-mystery-hunt.vercel.app/stage/2/a",
           "title": "Portal A: The Broken Prism",
           "type": "decoy"
         },
         {
           "portal": "b",
-          "url": "https://dkndh-49-43-228-241.free.pinggy.net/stage/2/b",
+          "url": "https://qr-mystery-hunt.vercel.app/stage/2/b",
           "title": "Portal B: The Binary Matrix Circuit",
           "type": "true"
         },
         {
           "portal": "c",
-          "url": "https://dkndh-49-43-228-241.free.pinggy.net/stage/2/c",
+          "url": "https://qr-mystery-hunt.vercel.app/stage/2/c",
           "title": "Portal C: The Whispering Echo",
           "type": "decoy"
         }
       ],
-      "gatewayUrl": "https://dkndh-49-43-228-241.free.pinggy.net/stage/2",
-      "payloadText": "🕵️ STAGE 2: THE HALL OF REFLECTIONS\n━━━━━━━━━━━━━━━━━━━━━━━━━\n❓ PUZZLE QUESTION:\nA 4x4 binary logic matrix is unpowered. Row energy targets are [2, 1, 3, 2] and Column targets are [2, 2, 2, 2]. Which portal connects the true binary circuit without triggering a blackout?\n━━━━━━━━━━━━━━━━━━━━━━━━━\nSelect your portal:\n1) https://dkndh-49-43-228-241.free.pinggy.net/stage/2/a\n2) https://dkndh-49-43-228-241.free.pinggy.net/stage/2/b\n3) https://dkndh-49-43-228-241.free.pinggy.net/stage/2/c\n⚠️ Only ONE portal holds the true key! (Max 2 attempts)"
+      "gatewayUrl": "https://qr-mystery-hunt.vercel.app/stage/2",
+      "payloadText": "🕵️ STAGE 2: THE HALL OF REFLECTIONS\n━━━━━━━━━━━━━━━━━━━━━━━━━\n❓ PUZZLE QUESTION:\nA 4x4 binary logic matrix is unpowered. Row energy targets are [2, 1, 3, 2] and Column targets are [2, 2, 2, 2]. Which portal connects the true binary circuit without triggering a blackout?\n━━━━━━━━━━━━━━━━━━━━━━━━━\nSelect your portal:\n1) https://qr-mystery-hunt.vercel.app/stage/2/a\n2) https://qr-mystery-hunt.vercel.app/stage/2/b\n3) https://qr-mystery-hunt.vercel.app/stage/2/c\n⚠️ Only ONE portal holds the true key! (Max 2 attempts)"
     },
     {
       "stageId": 3,
@@ -66,25 +66,25 @@
       "links": [
         {
           "portal": "a",
-          "url": "https://dkndh-49-43-228-241.free.pinggy.net/stage/3/a",
+          "url": "https://qr-mystery-hunt.vercel.app/stage/3/a",
           "title": "Portal A: The Alchemical Runes Lock",
           "type": "true"
         },
         {
           "portal": "b",
-          "url": "https://dkndh-49-43-228-241.free.pinggy.net/stage/3/b",
+          "url": "https://qr-mystery-hunt.vercel.app/stage/3/b",
           "title": "Portal B: The Gilded Scales",
           "type": "decoy"
         },
         {
           "portal": "c",
-          "url": "https://dkndh-49-43-228-241.free.pinggy.net/stage/3/c",
+          "url": "https://qr-mystery-hunt.vercel.app/stage/3/c",
           "title": "Portal C: The Labyrinth Map",
           "type": "decoy"
         }
       ],
-      "gatewayUrl": "https://dkndh-49-43-228-241.free.pinggy.net/stage/3",
-      "payloadText": "🕵️ STAGE 3: THE CLOCKWORK VAULT\n━━━━━━━━━━━━━━━━━━━━━━━━━\n❓ PUZZLE QUESTION:\nFive ancient alchemical seals guard the inner lock: Fire, Water, Earth, Air, and Aether. Align the runes in cosmological progression. Which portal unlocks the authentic elemental keystone?\n━━━━━━━━━━━━━━━━━━━━━━━━━\nSelect your portal:\n1) https://dkndh-49-43-228-241.free.pinggy.net/stage/3/a\n2) https://dkndh-49-43-228-241.free.pinggy.net/stage/3/b\n3) https://dkndh-49-43-228-241.free.pinggy.net/stage/3/c\n⚠️ Only ONE portal holds the true key! (Max 2 attempts)"
+      "gatewayUrl": "https://qr-mystery-hunt.vercel.app/stage/3",
+      "payloadText": "🕵️ STAGE 3: THE CLOCKWORK VAULT\n━━━━━━━━━━━━━━━━━━━━━━━━━\n❓ PUZZLE QUESTION:\nFive ancient alchemical seals guard the inner lock: Fire, Water, Earth, Air, and Aether. Align the runes in cosmological progression. Which portal unlocks the authentic elemental keystone?\n━━━━━━━━━━━━━━━━━━━━━━━━━\nSelect your portal:\n1) https://qr-mystery-hunt.vercel.app/stage/3/a\n2) https://qr-mystery-hunt.vercel.app/stage/3/b\n3) https://qr-mystery-hunt.vercel.app/stage/3/c\n⚠️ Only ONE portal holds the true key! (Max 2 attempts)"
     },
     {
       "stageId": 4,
@@ -94,25 +94,25 @@
       "links": [
         {
           "portal": "a",
-          "url": "https://dkndh-49-43-228-241.free.pinggy.net/stage/4/a",
+          "url": "https://qr-mystery-hunt.vercel.app/stage/4/a",
           "title": "Portal A: The Quicksand Glyph",
           "type": "decoy"
         },
         {
           "portal": "b",
-          "url": "https://dkndh-49-43-228-241.free.pinggy.net/stage/4/b",
+          "url": "https://qr-mystery-hunt.vercel.app/stage/4/b",
           "title": "Portal B: The Spectral Prism",
           "type": "decoy"
         },
         {
           "portal": "c",
-          "url": "https://dkndh-49-43-228-241.free.pinggy.net/stage/4/c",
+          "url": "https://qr-mystery-hunt.vercel.app/stage/4/c",
           "title": "Portal C: The Frequency Waveform Tuner",
           "type": "true"
         }
       ],
-      "gatewayUrl": "https://dkndh-49-43-228-241.free.pinggy.net/stage/4",
-      "payloadText": "🕵️ STAGE 4: THE NEURAL NEXUS\n━━━━━━━━━━━━━━━━━━━━━━━━━\n❓ PUZZLE QUESTION:\nA secret carrier frequency is hidden beneath static noise: Target 4 Hz Frequency, 75% Amplitude, 180° Phase. Which portal tunes into the authentic resonance transmitter?\n━━━━━━━━━━━━━━━━━━━━━━━━━\nSelect your portal:\n1) https://dkndh-49-43-228-241.free.pinggy.net/stage/4/a\n2) https://dkndh-49-43-228-241.free.pinggy.net/stage/4/b\n3) https://dkndh-49-43-228-241.free.pinggy.net/stage/4/c\n⚠️ Only ONE portal holds the true key! (Max 2 attempts)"
+      "gatewayUrl": "https://qr-mystery-hunt.vercel.app/stage/4",
+      "payloadText": "🕵️ STAGE 4: THE NEURAL NEXUS\n━━━━━━━━━━━━━━━━━━━━━━━━━\n❓ PUZZLE QUESTION:\nA secret carrier frequency is hidden beneath static noise: Target 4 Hz Frequency, 75% Amplitude, 180° Phase. Which portal tunes into the authentic resonance transmitter?\n━━━━━━━━━━━━━━━━━━━━━━━━━\nSelect your portal:\n1) https://qr-mystery-hunt.vercel.app/stage/4/a\n2) https://qr-mystery-hunt.vercel.app/stage/4/b\n3) https://qr-mystery-hunt.vercel.app/stage/4/c\n⚠️ Only ONE portal holds the true key! (Max 2 attempts)"
     },
     {
       "stageId": 5,
@@ -122,25 +122,25 @@
       "links": [
         {
           "portal": "a",
-          "url": "https://dkndh-49-43-228-241.free.pinggy.net/stage/5/a",
+          "url": "https://qr-mystery-hunt.vercel.app/stage/5/a",
           "title": "Portal A: The Siren's Scroll",
           "type": "decoy"
         },
         {
           "portal": "b",
-          "url": "https://dkndh-49-43-228-241.free.pinggy.net/stage/5/b",
+          "url": "https://qr-mystery-hunt.vercel.app/stage/5/b",
           "title": "Portal B: The Master Enigma Cryptogram",
           "type": "true"
         },
         {
           "portal": "c",
-          "url": "https://dkndh-49-43-228-241.free.pinggy.net/stage/5/c",
+          "url": "https://qr-mystery-hunt.vercel.app/stage/5/c",
           "title": "Portal C: The Ouroboros Loop",
           "type": "decoy"
         }
       ],
-      "gatewayUrl": "https://dkndh-49-43-228-241.free.pinggy.net/stage/5",
-      "payloadText": "🕵️ STAGE 5: THE MASTER SANCTUM\n━━━━━━━━━━━━━━━━━━━━━━━━━\n❓ PUZZLE QUESTION:\nThe grand vault door requires the master keyword. Use Vigenère keyword 'CHRONOS' to decrypt ciphertext [ QASVE XOFFVWE ]. Which portal will accept the master phrase to unlock the vault?\n━━━━━━━━━━━━━━━━━━━━━━━━━\nSelect your portal:\n1) https://dkndh-49-43-228-241.free.pinggy.net/stage/5/a\n2) https://dkndh-49-43-228-241.free.pinggy.net/stage/5/b\n3) https://dkndh-49-43-228-241.free.pinggy.net/stage/5/c\n⚠️ Only ONE portal holds the true key! (Max 2 attempts)"
+      "gatewayUrl": "https://qr-mystery-hunt.vercel.app/stage/5",
+      "payloadText": "🕵️ STAGE 5: THE MASTER SANCTUM\n━━━━━━━━━━━━━━━━━━━━━━━━━\n❓ PUZZLE QUESTION:\nThe grand vault door requires the master keyword. Use Vigenère keyword 'CHRONOS' to decrypt ciphertext [ QASVE XOFFVWE ]. Which portal will accept the master phrase to unlock the vault?\n━━━━━━━━━━━━━━━━━━━━━━━━━\nSelect your portal:\n1) https://qr-mystery-hunt.vercel.app/stage/5/a\n2) https://qr-mystery-hunt.vercel.app/stage/5/b\n3) https://qr-mystery-hunt.vercel.app/stage/5/c\n⚠️ Only ONE portal holds the true key! (Max 2 attempts)"
     }
   ]
 }
