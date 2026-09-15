@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puzzle Chamber | QR Mystery Hunt</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="app-header" style="margin-bottom: 1.5rem;">
+      <div>
+        <a id="btnBackToGateway" href="#" style="color: var(--accent-cyan); text-decoration: none; font-size: 0.85rem; display: inline-block; margin-bottom: 0.5rem;">
+          ← Back to Checkpoint Portals
+        </a>
+        <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+          <span class="stage-badge" id="lblStageBadge">STAGE 01</span>
+          <span class="stage-badge" id="lblPortalBadge" style="border-color: var(--accent-purple); color: var(--accent-purple);">PORTAL A</span>
+          <span class="stage-badge" id="lblAttemptsBadge" style="border-color: var(--accent-cyan); color: var(--accent-cyan);">🛡️ ATTEMPTS: 2/2</span>
+        </div>
+        <h1 class="main-title" id="puzzleHeading" style="margin-top: 0.5rem;">Loading Puzzle Chamber...</h1>
+        <p class="subtitle" id="puzzleSubtitle">Calibrating chamber sensors...</p>
+      </div>
+      <div>
+        <button id="btnHintToggle" class="btn btn-secondary btn-sm">
+          💡 Show Field Hint
+        </button>
+      </div>
+    </header>
+
+    <!-- Hint banner (collapsible) -->
+    <div id="hintBanner" class="alert-box alert-warning" style="margin-top: 0; margin-bottom: 1.5rem;">
+      <div id="hintText"></div>
+    </div>
+
+    <!-- Main Puzzle Container -->
+    <div class="puzzle-container">
+      <div style="margin-bottom: 1.5rem;">
+        <h3 style="color: #fff; margin-bottom: 0.5rem;">Objective & Lore</h3>
+        <p id="puzzleDescription" style="color: var(--text-muted); font-size: 1rem; line-height: 1.6;"></p>
+      </div>
+
+      <!-- Interactive Puzzle Workspace (Dynamic) -->
+      <div id="puzzleWorkspace">
+        <!-- Interactive UI injected by puzzle.js according to puzzleType -->
+      </div>
+
+      <!-- Feedback Area -->
+      <div id="puzzleFeedback" class="alert-box"></div>
+
+      <!-- Progression / Return Bar -->
+      <div id="nextStageAction" style="display: none; margin-top: 2rem; padding: 1.5rem; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent-emerald); border-radius: 0.75rem; text-align: center;">
+        <h3 style="color: var(--accent-emerald); margin-bottom: 0.5rem;">🎉 PASSKEY ACQUIRED!</h3>
+        <p id="passkeyDisplay" style="font-family: var(--font-mono); font-size: 1.5rem; color: #fff; font-weight: bold; margin: 0.75rem 0; letter-spacing: 0.1em;"></p>
+        <p id="nextClueDisplay" style="color: var(--text-muted); margin-bottom: 1.25rem; font-size: 0.95rem;"></p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="/" class="btn btn-emerald">Go to Passkey Terminal & Dashboard →</a>
+          <button id="btnCopyPasskey" class="btn btn-secondary">📋 Copy Passkey</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/soundFx.js"></script>
+  <script src="/puzzle.js"></script>
+</body>
+</html>

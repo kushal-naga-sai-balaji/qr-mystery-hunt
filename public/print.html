@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Printable Checkpoint Cards | The Chronos Protocol</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    @media screen {
+      body {
+        background: #111827;
+        color: #fff;
+        padding: 2rem;
+      }
+      .page {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+    }
+
+    .print-card {
+      border: 3px solid #1e293b;
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 12px;
+      padding: 1.75rem;
+      margin-bottom: 2.5rem;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    @media print {
+      body {
+        background: #fff !important;
+        color: #000 !important;
+        padding: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-card {
+        border: 2px solid #000 !important;
+        margin-bottom: 2rem !important;
+        box-shadow: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="no-print" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h2>🖨️ Printable Field Checkpoint Cards</h2>
+        <p style="color: #94a3b8; font-size: 0.9rem;">Print these 5 cards and place them at physical locations throughout your venue or mystery hunt room.</p>
+      </div>
+      <div>
+        <a href="/" class="btn btn-secondary">← Back to Hub</a>
+        <button onclick="window.print()" class="btn btn-emerald">🖨️ Print Now</button>
+      </div>
+    </div>
+
+    <div id="printCardsList">
+      <!-- Injected by script -->
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const [manRes, infoRes] = await Promise.all([
+          fetch('/qrs/manifest.json'),
+          fetch('/api/game-info')
+        ]);
+        const manifest = await manRes.json();
+        const info = await infoRes.json();
+
+        const container = document.getElementById('printCardsList');
+        container.innerHTML = '';
+
+        manifest.stages.forEach(stage => {
+          const card = document.createElement('div');
+          card.className = 'print-card';
+
+          card.innerHTML = `
+            <div style="flex-shrink: 0; text-align: center;">
+              <img src="${stage.pngUrl}" style="width: 220px; height: 220px; display: block; border: 1px solid #e2e8f0; border-radius: 8px;" alt="QR Stage ${stage.stageId}">
+              <div style="font-family: monospace; font-size: 0.75rem; margin-top: 0.35rem; color: #64748b;">CHECKPOINT 0${stage.stageId}</div>
+            </div>
+            <div style="flex: 1;">
+              <div style="font-family: monospace; font-size: 0.75rem; font-weight: bold; color: #0284c7; text-transform: uppercase;">
+                ⚡ PROJECT CHRONOS • MYSTERY HUNT
+              </div>
+              <h2 style="font-size: 1.5rem; margin: 0.25rem 0; color: #0f172a;">STAGE 0${stage.stageId}: ${stage.stageName}</h2>
+              <p style="font-size: 0.85rem; color: #475569; margin-bottom: 0.75rem;">
+                <strong>Mission Objective:</strong> Scan this QR code with your mobile camera to uncover the checkpoint portals. Only ONE portal leads to the authentic keystone puzzle. Solve the puzzle to discover the passkey and clue to the next stage!
+              </p>
+              <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 0.6rem; font-size: 0.8rem; font-family: monospace; color: #334155;">
+                <strong>Operative Passkey Log:</strong> [ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ]
+              </div>
+            </div>
+          `;
+
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

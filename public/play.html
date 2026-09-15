@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operative Portal | The Chronos Protocol</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+</head>
+<body>
+  <div class="container" style="max-width: 800px;">
+    <!-- Header -->
+    <header class="app-header">
+      <div>
+        <div class="brand-badge">⚡ FIELD OPERATIVE TERMINAL</div>
+        <h1 class="main-title">Project Chronos</h1>
+        <p class="subtitle">Scan QR checkpoints, crack the authentic portals, and unlock the vault.</p>
+      </div>
+      <div>
+        <button id="btnOpenScanner" class="btn btn-emerald">
+          📷 Open QR Scanner
+        </button>
+      </div>
+    </header>
+
+    <!-- Operative Profile Bar -->
+    <div class="card" style="margin-bottom: 2rem; border-color: var(--accent-cyan);">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Operative / Team:</span>
+          <h3 id="lblTeamName" style="color: var(--accent-cyan);">Agent-77</h3>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <input type="text" id="txtTeamNameInput" placeholder="Change Team Name" style="background: #1e293b; color: #fff; border: 1px solid var(--border-color); padding: 0.4rem 0.75rem; border-radius: 0.35rem; font-size: 0.85rem;">
+          <button id="btnSaveTeam" class="btn btn-secondary btn-sm">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scanner Box (Inline or Modal) -->
+    <div id="scannerSection" class="card" style="display: none; margin-bottom: 2rem; text-align: center;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <h3 style="color: var(--accent-cyan);">Aim Camera at Checkpoint QR</h3>
+        <button id="btnCloseScanner" class="btn btn-secondary btn-sm">✕ Close</button>
+      </div>
+      <div id="reader" style="max-width: 400px; margin: 0 auto; border-radius: 8px; overflow: hidden;"></div>
+      <div id="scannerResult" class="alert-box alert-success" style="display: none; text-align: left; margin-top: 1rem;"></div>
+    </div>
+
+    <!-- Passkey Progression Validator -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <div class="card-header">
+        <div>
+          <span class="stage-badge">PROGRESSION PROTOCOL</span>
+          <h3 style="margin-top: 0.25rem;">Submit Stage Passkey</h3>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">
+            When you solve the authentic portal of a stage, enter its passkey below to unlock the next checkpoint!
+          </p>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; margin: 1rem 0; flex-wrap: wrap;">
+        <select id="selStage" style="background: #1e293b; color: #fff; border: 1px solid var(--border-color); padding: 0.6rem 0.75rem; border-radius: 0.5rem; font-family: inherit;">
+          <option value="1">Stage 1</option>
+          <option value="2">Stage 2</option>
+          <option value="3">Stage 3</option>
+          <option value="4">Stage 4</option>
+          <option value="5">Stage 5</option>
+        </select>
+        <input type="text" id="txtPasskey" placeholder="e.g. CHRONOS-74" style="flex: 1; background: #1e293b; color: #fff; border: 1px solid var(--border-color); padding: 0.6rem 1rem; border-radius: 0.5rem; font-family: var(--font-mono); text-transform: uppercase;">
+        <button id="btnSubmitPasskey" class="btn btn-emerald">Submit Passkey</button>
+      </div>
+
+      <div id="passFeedback" class="alert-box"></div>
+    </div>
+
+    <!-- Mission Stages Hub -->
+    <div class="card">
+      <h3 style="color: #fff; margin-bottom: 1rem;">Mission Checkpoints</h3>
+      <div id="stagesList" style="display: flex; flex-direction: column; gap: 1rem;">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <script src="/soundFx.js"></script>
+  <script>
+    let html5QrScanner = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      loadTeam();
+      setupScanner();
+      setupPasskey();
+      await loadStages();
+    });
+
+    function getTeam() {
+      return localStorage.getItem('chronos_team_name') || 'Team-Alpha';
+    }
+
+    function loadTeam() {
+      const team = getTeam();
+      document.getElementById('lblTeamName').textContent = team;
+      document.getElementById('txtTeamNameInput').value = team;
+
+      document.getElementById('btnSaveTeam').addEventListener('click', () => {
+        const val = document.getElementById('txtTeamNameInput').value.trim();
+        if (val) {
+          localStorage.setItem('chronos_team_name', val);
+          document.getElementById('lblTeamName').textContent = val;
+          alert('Operative name updated to: ' + val);
+        }
+      });
+    }
+
+    async function loadStages() {
+      try {
+        const res = await fetch('/api/game-info');
+        const data = await res.json();
+        const completed = JSON.parse(localStorage.getItem('chronos_completed_stages') || '[]');
+
+        const container = document.getElementById('stagesList');
+        container.innerHTML = '';
+
+        data.stages.forEach(stage => {
+          const isDone = completed.includes(stage.id);
+          const item = document.createElement('div');
+          item.style.cssText = `
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+            padding: 1rem; border-radius: 0.75rem; border: 1px solid ${isDone ? 'var(--accent-emerald)' : 'var(--border-color)'};
+            background: ${isDone ? 'rgba(16, 185, 129, 0.1)' : 'rgba(30, 41, 59, 0.5)'};
+          `;
+
+          item.innerHTML = `
+            <div>
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; color: ${isDone ? 'var(--accent-emerald)' : 'var(--accent-cyan)'}; font-weight: bold;">
+                ${isDone ? '✅ CHECKPOINT CLEARED' : `CHECKPOINT 0${stage.id}`}
+              </div>
+              <h4 style="margin: 0.2rem 0; color: #fff;">${stage.name}</h4>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">${stage.locationClue}</p>
+            </div>
+            <div>
+              ${isDone 
+                ? '<span style="color: var(--accent-emerald); font-family: var(--font-mono); font-size: 0.85rem; font-weight: bold; background: rgba(16,185,129,0.15); padding: 0.35rem 0.75rem; border-radius: 4px; border: 1px solid var(--accent-emerald);">CLEARED</span>' 
+                : '<span style="color: var(--accent-amber); font-family: var(--font-mono); font-size: 0.8rem; background: rgba(245,158,11,0.1); padding: 0.35rem 0.65rem; border-radius: 4px; border: 1px solid rgba(245,158,11,0.3);">🔒 SCAN QR CODE TO ENTER</span>'
+              }
+            </div>
+          `;
+
+          container.appendChild(item);
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function setupPasskey() {
+      const btn = document.getElementById('btnSubmitPasskey');
+      const sel = document.getElementById('selStage');
+      const txt = document.getElementById('txtPasskey');
+      const feedback = document.getElementById('passFeedback');
+
+      btn.addEventListener('click', async () => {
+        const stageId = sel.value;
+        const passkey = txt.value.trim();
+        const teamName = getTeam();
+
+        if (!passkey) return alert('Enter passkey');
+
+        try {
+          const res = await fetch('/api/verify-passkey', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ stageId, passkey, teamName })
+          });
+          const data = await res.json();
+
+          feedback.className = 'alert-box ' + (data.success ? 'alert-success' : 'alert-error');
+          feedback.style.display = 'block';
+
+          if (data.success) {
+            window.soundFx.playSuccess();
+            feedback.innerHTML = `
+              <strong>🎉 CHECKPOINT CLEARED!</strong><br>
+              ${data.message}<br>
+              <div style="margin-top: 0.5rem; padding: 0.5rem; background: rgba(0,0,0,0.3); border-radius: 0.25rem;">
+                ${data.nextStageClue}
+              </div>
+            `;
+            const comp = JSON.parse(localStorage.getItem('chronos_completed_stages') || '[]');
+            if (!comp.includes(parseInt(stageId, 10))) {
+              comp.push(parseInt(stageId, 10));
+              localStorage.setItem('chronos_completed_stages', JSON.stringify(comp));
+              loadStages();
+            }
+          } else {
+            window.soundFx.playGlitch();
+            feedback.textContent = `❌ ${data.message}`;
+          }
+        } catch (e) {
+          feedback.className = 'alert-box alert-error show';
+          feedback.textContent = e.message;
+        }
+      });
+    }
+
+    function setupScanner() {
+      const btnOpen = document.getElementById('btnOpenScanner');
+      const btnClose = document.getElementById('btnCloseScanner');
+      const section = document.getElementById('scannerSection');
+      const resDiv = document.getElementById('scannerResult');
+
+      btnOpen.addEventListener('click', () => {
+        section.style.display = 'block';
+        window.soundFx.playClick();
+        if (!html5QrScanner) {
+          html5QrScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: { width: 250, height: 250 } });
+        }
+        html5QrScanner.render((decodedText) => {
+          window.soundFx.playSuccess();
+          resDiv.style.display = 'block';
+          const urls = decodedText.match(/https?:\/\/[^\s]+/g) || [];
+          resDiv.innerHTML = `
+            <strong>🎯 Checkpoint Intercepted:</strong>
+            <ul style="margin: 0.5rem 0 0 1.25rem;">
+              ${urls.map(u => `<li><a href="${u}" target="_blank" style="color: var(--accent-cyan);">${u}</a></li>`).join('')}
+            </ul>
+          `;
+        });
+      });
+
+      btnClose.addEventListener('click', () => {
+        section.style.display = 'none';
+        if (html5QrScanner) html5QrScanner.clear().catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>

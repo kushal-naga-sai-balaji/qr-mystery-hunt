@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Mystery Hunt | The Chronos Protocol</title>
+  <link rel="stylesheet" href="/styles.css">
+  <!-- HTML5-QRCode Scanner Library for in-browser testing -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="app-header">
+      <div>
+        <div class="brand-badge">⚡ THE CHRONOS PROTOCOL • FIELD OPERATIVE SYSTEM</div>
+        <h1 class="main-title">QR Mystery Hunt</h1>
+        <p class="subtitle">5 Sequential QR Checkpoints • 3 Portals Per Code • 1 Authentic Path</p>
+      </div>
+      <div class="header-actions no-print" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+        <button id="btnOpenScanner" class="btn btn-emerald">
+          📷 Open In-App QR Scanner
+        </button>
+        <button onclick="window.open('/print.html', '_blank')" class="btn btn-secondary">
+          🖨️ Print Field Cards
+        </button>
+        <button id="btnToggleGuide" class="btn btn-primary">
+          🗝️ Organizer Cheat Sheet
+        </button>
+      </div>
+    </header>
+
+    <!-- Network / Host Info Bar -->
+    <div class="controls-bar no-print">
+      <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <span style="font-size: 0.9rem; color: var(--text-muted);">
+          🌐 <strong>Current Host URL for QRs:</strong> <code id="lblCurrentHost" style="color: var(--accent-cyan);">Loading...</code>
+        </span>
+        <button id="btnChangeHost" class="btn btn-secondary btn-sm">Change Host / IP</button>
+      </div>
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="checkpoints">QR Stations (5)</button>
+        <button class="tab-btn" data-tab="validator">Passkey Terminal</button>
+        <button class="tab-btn" data-tab="rules">Hunt Briefing</button>
+      </div>
+    </div>
+
+    <!-- Organizer Master Guide (Collapsible) -->
+    <div id="masterGuideSection" class="card no-print" style="display: none; margin-bottom: 2rem; border-color: var(--accent-amber);">
+      <div class="card-header">
+        <div>
+          <h3 style="color: var(--accent-amber);">🗝️ Game Master Walkthrough & Solution Key</h3>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">Confidential for Hunt Organizers only. Contains all correct paths and passkeys.</p>
+        </div>
+        <button id="btnCloseGuide" class="btn btn-secondary btn-sm">Close</button>
+      </div>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border-color); color: var(--accent-cyan);">
+              <th style="padding: 0.5rem;">Stage</th>
+              <th style="padding: 0.5rem;">QR Station</th>
+              <th style="padding: 0.5rem;">True Portal</th>
+              <th style="padding: 0.5rem;">Puzzle Type</th>
+              <th style="padding: 0.5rem;">Solution / Passkey</th>
+              <th style="padding: 0.5rem;">Next Stage Location Clue</th>
+            </tr>
+          </thead>
+          <tbody id="guideTableBody">
+            <!-- Populated dynamically by app.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab 1: QR Stations Gallery -->
+    <section id="tabCheckpoints" class="tab-content">
+      <div class="cards-grid" id="qrCardsGrid">
+        <!-- 5 Stage QR Cards rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- Tab 2: Passkey Progression Terminal -->
+    <section id="tabValidator" class="tab-content" style="display: none;">
+      <div class="card" style="max-width: 700px; margin: 0 auto;">
+        <div class="card-header">
+          <div>
+            <span class="stage-badge">PROGRESSION PROTOCOL</span>
+            <h2 style="margin-top: 0.5rem;">Stage Passkey Validator</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">
+              When operatives solve the authentic portal at each stage, they receive a Stage Passkey. Verify passkeys here to track mission progress!
+            </p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin: 1.5rem 0; flex-wrap: wrap;">
+          <select id="selStageCheck" style="background: #1e293b; color: #fff; border: 1px solid var(--border-color); padding: 0.6rem 1rem; border-radius: 0.5rem; font-family: inherit;">
+            <option value="1">Stage 1: The Gate of Whispers</option>
+            <option value="2">Stage 2: The Hall of Reflections</option>
+            <option value="3">Stage 3: The Clockwork Vault</option>
+            <option value="4">Stage 4: The Neural Nexus</option>
+            <option value="5">Stage 5: The Master Sanctum</option>
+          </select>
+          <input type="text" id="txtPasskeyInput" placeholder="Enter Stage Passkey (e.g. CHRONOS-74)" style="flex: 1; min-width: 200px; background: #1e293b; color: #fff; border: 1px solid var(--border-color); padding: 0.6rem 1rem; border-radius: 0.5rem; font-family: var(--font-mono); text-transform: uppercase;">
+          <button id="btnVerifyPasskey" class="btn btn-emerald">Verify Passkey</button>
+        </div>
+
+        <div id="validatorFeedback" class="alert-box"></div>
+
+        <div style="margin-top: 2rem;">
+          <h4 style="color: var(--accent-cyan); margin-bottom: 0.75rem;">Mission Stage Status</h4>
+          <div id="stageProgressBar" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <!-- Progress step pills -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 3: Hunt Rules & Briefing -->
+    <section id="tabRules" class="tab-content" style="display: none;">
+      <div class="card" style="max-width: 800px; margin: 0 auto; line-height: 1.8;">
+        <h2 style="color: var(--accent-cyan); margin-bottom: 1rem;">📜 Field Operative Briefing</h2>
+        <p>Welcome to <strong>Project Chronos</strong>. You are tasked with cracking 5 sequential security checkpoints distributed across the operational area.</p>
+        
+        <h4 style="color: #fff; margin-top: 1.5rem;">Rule 1: The Three Portals</h4>
+        <p style="color: var(--text-muted);">
+          Each QR checkpoint encodes <strong>three distinct portal links</strong> (Portal A, Portal B, Portal C). When scanned with any smartphone camera or QR reader, all three links will be presented.
+        </p>
+
+        <h4 style="color: #fff; margin-top: 1.5rem;">Rule 2: Authentic vs Decoy</h4>
+        <p style="color: var(--text-muted);">
+          Every link hosts an interactive puzzle. However, <strong>two links are deceptive decoys</strong>! Solving a decoy triggers a decoy alarm and wastes valuable time. Only the <strong>single authentic portal</strong> yields the Stage Passkey and location clue to the next QR checkpoint.
+        </p>
+
+        <h4 style="color: #fff; margin-top: 1.5rem;">Rule 3: Progression</h4>
+        <p style="color: var(--text-muted);">
+          Solve Stage 1 to locate QR 2. Solve Stage 2 to locate QR 3. Complete all 5 stages to unlock the Master Vault in Stage 5!
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <!-- In-Browser QR Scanner Modal -->
+  <div id="scannerModal" class="scanner-modal">
+    <div class="scanner-content">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="color: var(--accent-cyan);">📷 Operative Scanner</h3>
+        <button id="btnCloseScanner" class="btn btn-secondary btn-sm">✕ Close</button>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">
+        Scan a QR code with your camera, or upload a saved QR image:
+      </p>
+      <div id="reader"></div>
+      <div id="scannerResult" style="margin-top: 1rem; text-align: left; display: none;" class="alert-box alert-success"></div>
+    </div>
+  </div>
+
+  <script src="/soundFx.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

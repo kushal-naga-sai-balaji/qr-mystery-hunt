@@ -1,0 +1,15 @@
+{
+  "name": "qr-mystery-hunt",
+  "version": "1.0.0",
+  "description": "Interactive 5-Stage QR Mystery Hunt Game",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "generate-qr": "node scripts/generate_qrs.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "qrcode": "^1.5.3",
+    "cors": "^2.8.5"
+  }
+}

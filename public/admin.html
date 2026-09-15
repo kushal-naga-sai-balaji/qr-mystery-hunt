@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin & Answer Verifier | The Chronos Protocol</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      font-weight: bold;
+    }
+    .badge-correct { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+    .badge-decoy { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+    .badge-wrong { background: rgba(244, 63, 94, 0.2); color: #f87171; border: 1px solid #f43f5e; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="app-header">
+      <div>
+        <div class="brand-badge" style="border-color: var(--accent-amber); color: var(--accent-amber);">
+          🛡️ ORGANIZER CONTROL ROOM & VERIFICATION TERMINAL
+        </div>
+        <h1 class="main-title">Answer Verifier & Live Submissions</h1>
+        <p class="subtitle">Monitor operative submissions in real time and manually verify player solutions.</p>
+      </div>
+      <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+        <a href="/" class="btn btn-secondary btn-sm">🏠 QR Hub</a>
+        <a href="/play" target="_blank" class="btn btn-secondary btn-sm">🎮 Player View ↗</a>
+        <button id="btnManualRefresh" class="btn btn-emerald btn-sm">🔄 Refresh Data</button>
+      </div>
+    </header>
+
+    <!-- Stats Summary Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+      <div class="card" style="padding: 1.25rem;">
+        <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Total Attempts</div>
+        <div id="statTotal" style="font-size: 2rem; font-weight: bold; color: var(--accent-cyan);">0</div>
+      </div>
+      <div class="card" style="padding: 1.25rem;">
+        <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Correct Solvers</div>
+        <div id="statCorrect" style="font-size: 2rem; font-weight: bold; color: var(--accent-emerald);">0</div>
+      </div>
+      <div class="card" style="padding: 1.25rem;">
+        <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Decoys Triggered</div>
+        <div id="statDecoy" style="font-size: 2rem; font-weight: bold; color: var(--accent-amber);">0</div>
+      </div>
+      <div class="card" style="padding: 1.25rem;">
+        <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Incorrect Attempts</div>
+        <div id="statWrong" style="font-size: 2rem; font-weight: bold; color: var(--accent-rose);">0</div>
+      </div>
+    </div>
+
+    <!-- Manual Answer & Passkey Verifier Tool -->
+    <div class="card" style="margin-bottom: 2.5rem; border-color: var(--accent-cyan);">
+      <h3 style="color: var(--accent-cyan); margin-bottom: 0.5rem;">🔍 Manual Answer Verifier</h3>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+        If an operative sends you their answer or passkey via chat, phone, or verbal check, type it below to immediately verify:
+      </p>
+
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <select id="selVerifierStage" style="background: #1e293b; color: #fff; border: 1px solid var(--border-color); padding: 0.6rem 0.75rem; border-radius: 0.5rem;">
+          <option value="">Check Across All Stages</option>
+          <option value="1">Stage 1: The Gate of Whispers</option>
+          <option value="2">Stage 2: The Hall of Reflections</option>
+          <option value="3">Stage 3: The Clockwork Vault</option>
+          <option value="4">Stage 4: The Neural Nexus</option>
+          <option value="5">Stage 5: The Master Sanctum</option>
+        </select>
+        <input type="text" id="txtVerifyInput" placeholder="Enter word, phrase, or passkey (e.g. CHRONOS or CHRONOS-74)" style="flex: 1; min-width: 250px; background: #1e293b; color: #fff; border: 1px solid var(--border-color); padding: 0.6rem 1rem; border-radius: 0.5rem; font-family: var(--font-mono);">
+        <button id="btnCheckManual" class="btn btn-emerald">Verify Answer</button>
+      </div>
+
+      <div id="manualFeedback" class="alert-box" style="margin-top: 1rem;"></div>
+    </div>
+
+    <!-- Live Submissions Log Table -->
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+        <div>
+          <h3>Live Operative Submissions Log</h3>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">Records every interactive puzzle answer and passkey verification.</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button id="btnClearLogs" class="btn btn-secondary btn-sm" style="color: var(--accent-rose);">🗑️ Clear Logs</button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+        <button class="filter-btn active tab-btn" data-filter="all">All</button>
+        <button class="filter-btn tab-btn" data-filter="CORRECT">🟢 Correct Solvers</button>
+        <button class="filter-btn tab-btn" data-filter="DECOY">🟡 Decoys</button>
+        <button class="filter-btn tab-btn" data-filter="INCORRECT">🔴 Incorrect</button>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border-color); color: var(--accent-cyan); font-family: var(--font-mono);">
+              <th style="padding: 0.75rem 0.5rem;">Time</th>
+              <th style="padding: 0.75rem 0.5rem;">Operative / Team</th>
+              <th style="padding: 0.75rem 0.5rem;">Stage</th>
+              <th style="padding: 0.75rem 0.5rem;">Portal</th>
+              <th style="padding: 0.75rem 0.5rem;">Submitted Input</th>
+              <th style="padding: 0.75rem 0.5rem;">Verdict</th>
+              <th style="padding: 0.75rem 0.5rem;">Passkey Awarded</th>
+            </tr>
+          </thead>
+          <tbody id="submissionsTableBody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="/soundFx.js"></script>
+  <script>
+    let allSubmissions = [];
+    let currentFilter = 'all';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadSubmissions();
+      setupManualVerifier();
+      setupFilters();
+      // Auto refresh every 4 seconds
+      setInterval(loadSubmissions, 4000);
+
+      document.getElementById('btnManualRefresh').addEventListener('click', loadSubmissions);
+      document.getElementById('btnClearLogs').addEventListener('click', clearLogs);
+    });
+
+    async function loadSubmissions() {
+      try {
+        const res = await fetch('/api/admin/submissions');
+        const data = await res.json();
+        allSubmissions = data.submissions || [];
+        updateStats();
+        renderTable();
+      } catch (err) {
+        console.error("Failed to load submissions", err);
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('statTotal').textContent = allSubmissions.length;
+      document.getElementById('statCorrect').textContent = allSubmissions.filter(s => s.status === 'CORRECT').length;
+      document.getElementById('statDecoy').textContent = allSubmissions.filter(s => s.status === 'DECOY_TRIGGERED' || s.type === 'DECOY').length;
+      document.getElementById('statWrong').textContent = allSubmissions.filter(s => s.status === 'INCORRECT').length;
+    }
+
+    function setupFilters() {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentFilter = btn.dataset.filter;
+          renderTable();
+        });
+      });
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('submissionsTableBody');
+      tbody.innerHTML = '';
+
+      const filtered = allSubmissions.filter(item => {
+        if (currentFilter === 'all') return true;
+        if (currentFilter === 'CORRECT') return item.status === 'CORRECT';
+        if (currentFilter === 'DECOY') return item.status === 'DECOY_TRIGGERED' || item.type === 'DECOY';
+        if (currentFilter === 'INCORRECT') return item.status === 'INCORRECT';
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="padding: 2rem; text-align: center; color: var(--text-muted);">No submissions recorded yet. Share the frontend link with players to begin!</td></tr>`;
+        return;
+      }
+
+      filtered.forEach(sub => {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+
+        let badgeClass = 'badge-wrong';
+        let badgeLabel = 'INCORRECT';
+
+        if (sub.status === 'CORRECT') {
+          badgeClass = 'badge-correct';
+          badgeLabel = 'CORRECT';
+        } else if (sub.status === 'DECOY_TRIGGERED' || sub.type === 'DECOY') {
+          badgeClass = 'badge-decoy';
+          badgeLabel = 'DECOY TRAP';
+        }
+
+        const dateStr = new Date(sub.timestamp).toLocaleTimeString();
+
+        tr.innerHTML = `
+          <td style="padding: 0.6rem 0.5rem; color: var(--text-muted); font-family: var(--font-mono);">${dateStr}</td>
+          <td style="padding: 0.6rem 0.5rem; font-weight: bold; color: #fff;">${sub.teamName || 'Anonymous'}</td>
+          <td style="padding: 0.6rem 0.5rem; font-family: var(--font-mono); color: var(--accent-cyan);">Stage ${sub.stageId}</td>
+          <td style="padding: 0.6rem 0.5rem;">${sub.portalTitle || sub.portalId}</td>
+          <td style="padding: 0.6rem 0.5rem; font-family: var(--font-mono); color: #cbd5e1;"><code>${sub.answer}</code></td>
+          <td style="padding: 0.6rem 0.5rem;"><span class="badge ${badgeClass}">${badgeLabel}</span></td>
+          <td style="padding: 0.6rem 0.5rem; font-family: var(--font-mono); color: var(--accent-emerald); font-weight: bold;">
+            ${sub.passkeyAwarded ? sub.passkeyAwarded : '—'}
+          </td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function setupManualVerifier() {
+      const btn = document.getElementById('btnCheckManual');
+      const txt = document.getElementById('txtVerifyInput');
+      const sel = document.getElementById('selVerifierStage');
+      const feedback = document.getElementById('manualFeedback');
+
+      btn.addEventListener('click', async () => {
+        const query = txt.value.trim();
+        const stageId = sel.value;
+
+        if (!query) return alert('Please enter an answer to check');
+
+        try {
+          const res = await fetch('/api/admin/verify-manual', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ stageId, query })
+          });
+          const data = await res.json();
+
+          feedback.style.display = 'block';
+
+          if (data.match) {
+            window.soundFx.playSuccess();
+            feedback.className = 'alert-box alert-success';
+            feedback.innerHTML = `
+              <strong>✅ MATCH FOUND!</strong><br>
+              ${data.results.map(r => `
+                <div style="margin-top: 0.5rem; padding: 0.5rem; background: rgba(0,0,0,0.3); border-radius: 4px;">
+                  <strong>Stage ${r.stageId} (${r.stageName}):</strong> ${r.details}<br>
+                  ${r.passkey ? `🔑 Passkey: <code>${r.passkey}</code><br>` : ''}
+                  ${r.nextStageClue ? `📍 Next Location: <em>${r.nextStageClue}</em>` : ''}
+                </div>
+              `).join('')}
+            `;
+          } else {
+            window.soundFx.playGlitch();
+            feedback.className = 'alert-box alert-error';
+            feedback.innerHTML = `<strong>❌ NO MATCH:</strong> ${data.message}`;
+          }
+        } catch (e) {
+          feedback.className = 'alert-box alert-error';
+          feedback.textContent = e.message;
+        }
+      });
+    }
+
+    async function clearLogs() {
+      if (!confirm('Are you sure you want to clear all submissions?')) return;
+      try {
+        await fetch('/api/admin/clear-submissions', { method: 'POST' });
+        loadSubmissions();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+  </script>
+</body>
+</html>

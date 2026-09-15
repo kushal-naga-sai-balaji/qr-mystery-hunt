@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage Gateway | QR Mystery Hunt</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="app-header">
+      <div>
+        <a href="/" style="color: var(--accent-cyan); text-decoration: none; font-size: 0.85rem; display: inline-block; margin-bottom: 0.5rem;">
+          ← Return to Command Hub
+        </a>
+        <div class="brand-badge" id="stageBadge">CHECKPOINT GATEWAY</div>
+        <h1 class="main-title" id="stageTitle">Loading Checkpoint...</h1>
+        <p class="subtitle" id="stageLocation">Intercepting beacon signal...</p>
+      </div>
+    </header>
+
+    <div class="card" style="margin-bottom: 2rem; border-color: var(--accent-amber);">
+      <h3 style="color: var(--accent-amber); margin-bottom: 0.5rem;">⚠️ Tri-Portal Divergence Detected</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        This QR checkpoint radiates <strong>3 distinct energetic portals</strong>. Every portal contains a challenge, but <strong>only ONE is the authentic keystone</strong>. Entering a decoy triggers security traps! Choose your portal to proceed:
+      </p>
+    </div>
+
+    <!-- 3 Portal Cards -->
+    <div class="cards-grid" id="portalCardsContainer">
+      <!-- Injected by script -->
+    </div>
+  </div>
+
+  <script src="/soundFx.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      // e.g. /stage/1
+      const stageId = parseInt(pathParts[1] || '1', 10);
+
+      try {
+        const res = await fetch('/api/game-info');
+        const data = await res.json();
+        const stage = data.stages.find(s => s.id === stageId);
+
+        if (!stage) {
+          document.getElementById('stageTitle').textContent = "Checkpoint Not Found";
+          return;
+        }
+
+        document.getElementById('stageBadge').textContent = `CHECKPOINT 0${stage.id}`;
+        document.getElementById('stageTitle').textContent = stage.name;
+        document.getElementById('stageLocation').textContent = `Location Clue: ${stage.locationClue}`;
+
+        const container = document.getElementById('portalCardsContainer');
+        container.innerHTML = '';
+
+        stage.portals.forEach(portal => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.style.display = 'flex';
+          card.style.flexDirection = 'column';
+          card.style.justifyContent = 'space-between';
+
+          card.innerHTML = `
+            <div>
+              <div class="card-header">
+                <span class="stage-badge" style="border-color: var(--${portal.themeColor || 'accent-cyan'}); color: var(--${portal.themeColor || 'accent-cyan'});">
+                  PORTAL ${portal.id.toUpperCase()}
+                </span>
+                <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">
+                  ${portal.puzzleType}
+                </span>
+              </div>
+              <h3 style="margin-bottom: 0.5rem;">${portal.title}</h3>
+              <p style="color: var(--accent-cyan); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">
+                ${portal.subtitle}
+              </p>
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+                ${portal.description}
+              </p>
+            </div>
+
+            <a href="/stage/${stage.id}/${portal.id}" class="btn btn-primary" style="width: 100%; text-align: center;" onclick="window.soundFx.playClick()">
+              Enter Portal ${portal.id.toUpperCase()} →
+            </a>
+          `;
+
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Failed to load stage gateway", err);
+      }
+    });
+  </script>
+</body>
+</html>
